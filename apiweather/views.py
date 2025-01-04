@@ -9,7 +9,7 @@ def index(request):
     error_message = None
 
     counter, created = PageReloadCounter.objects.get_or_create(id=1)
-    counter.count += 3
+    counter.count += 1
     counter.save()
 
     if request.method == "POST":
@@ -26,7 +26,7 @@ def index(request):
             description = data["weather"][0]["description"]
             icon = data["weather"][0]["icon"]
             timezone = data["timezone"]
-            dt_utc = datetime.utcfromtimestamp(data["dt"])  # UTC time
+            dt_utc = datetime.fromtimestamp(data["dt"])  # UTC time
 
             # تحويل UTC إلى الوقت المحلي
             city_timezone = pytz.timezone(str(pytz.country_timezones(data["sys"]["country"])[0]))
@@ -37,7 +37,7 @@ def index(request):
                 "temperature": temperature,
                 "description": description,
                 "icon": icon,
-                "local_time": local_time.strftime('%Y-%m-%d %H:%M:%S')
+                "local_time": local_time.strftime('%Y-%m-%d %H:%M')
             })
         else:
             error_message = "City not found please try again"
