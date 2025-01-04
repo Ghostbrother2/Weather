@@ -1,0 +1,92 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="google-site-verification" content="LIuPOcwcbNefQFEWouR_cvpJmKh-Q_soMGr2gxjiGoU" />
+    <meta name="google-site-verification" content="your verification string">
+    <meta name="description" content=" تعرف على حالة الطقس في مدينتك مع توقعات دقيقة ومعلومات شاملة عن درجات الحرارة، الرطوبة، وسرعة الرياح. MS1986 Weather is the state of the atmosphere at a particular moment in time, which includes the amount of heat, dryness, wind, or sunshine. Climate, seasons, and fronts are all variables that influence the type of weather that occurs. Meteorologists study weather patterns to predict future weather events.">
+    <meta name="keywords" content="الطقس, توقعات الطقس, درجات الحرارة, رطوبة, سرعة الرياح, الطقس اليومو ms1986,weather, rain, cloud, rainbow, temperature, pressure, overcast, shower, sunrise, dry, tornado, sunset, humidity, cold, heat, wind, cloudy, heat wave">
+    <link rel="icon" href="https://weather.sou.edu/favicon.ico" type="image/x-icon" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Weather</title>
+<link rel="stylesheet" href="{%static 'style.css'%}">
+</head>
+  <body>
+    <section class="section">
+      <div class="container">
+        <center>
+          <div class="center action-counter">
+            <strong class="center">
+              <p class="content has-text-centered is-size-7-mobile is-size-5-tablet is-size-4-desktop"> To know the weather and time, write the name of the city correctly. </p>
+            </strong>
+          </div>
+        </center>
+        <br />
+        <div class="columns">
+          <div class="column is-offset-4 is-4">
+            <form method="POST">
+              {% csrf_token %}
+              <div class="field has-addons">
+                <div class="control is-expanded">
+                  <input
+                    class="input"
+                    type="text"
+                    name="name"
+                    placeholder=" Enter a City "
+                    required
+                  />
+                </div>
+                <div class="control">
+                  <button type="submit" class="button is-info">Find</button>
+                </div>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+    <!-- رسالة الخطأ -->
+    {% if error_message %}
+    <section class="section">
+      <div class="container">
+        <div class="notification is-danger">{{ error_message }}</div>
+      </div>
+    </section>
+    {% endif %}
+    <!-- بيانات الطقس -->
+    <section class="section">
+      <div class="container">
+        {% for city_weather in weather_data %}
+        <div class="box">
+          <article class="media">
+            <div class="media-left">
+              <figure class="image is-64x64">
+                <img
+                  src="http://openweathermap.org/img/w/{{ city_weather.icon }}.png"
+                  alt="Weather Icon"
+                />
+              </figure>
+            </div>
+            <div class="media-content">
+              <div class="content">
+                <p>
+                  <strong>{{ city_weather.city }}</strong>
+                  <br />
+                  {{ city_weather.temperature }}°C
+                  <br />
+                  {{ city_weather.description }}
+                  <br />
+                  <strong>Time&Date:</strong>{{ city_weather.local_time }}
+                </p>
+              </div>
+            </div>
+          </article>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+    <p class="center content has-text-centered is-size-7-mobile is-size-5-tablet is-size-4-desktop"> Visitor Number : {{ reload_count }} </p>
+  </body>
+</html>
